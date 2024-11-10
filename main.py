@@ -2,13 +2,14 @@ import io
 
 from env import Env
 from fdk import response
-from client import NotionMarket, NotionMarketOpts, UpdateOpts
+from client import NotionMarket, NotionMarketOpts, UpdateOpts, \
+    NotionMarketHandler
 from utils.filter_args import FilterArgs
-from handlers import Handler
+from handlers import Handlers
 
 
 def init_client():
-    opts = NotionMarketOpts(token_v2=Env.TOKEN_V2)
+    opts = NotionMarketOpts(token_v2=Env.NOTION_TOKEN_V2)
 
     return NotionMarket(opts)
 
@@ -18,9 +19,10 @@ def handler(ctx, data: io.BytesIO = None):
         client = init_client()
 
         opts = UpdateOpts(database_id=Env.DATABASE_ID, handlers=[
-            Handler(name="crypto",
-                    filters=FilterArgs.select_eq("Tipo", "Criptos"),
-                    handler=lambda ticker: Handler.CryptoCom(ticker)),
+            NotionMarketHandler(name="crypto",
+                                filters=FilterArgs.select_eq("Tipo", "Criptos"),
+                                handler=lambda ticker: Handlers.CryptoCom(
+                                    ticker)),
             # Handler(name="stocks",
             #        filters=FilterArgs.multi_select_contains("Tipo",
             #                                                 "Acciones"),
@@ -37,3 +39,11 @@ def handler(ctx, data: io.BytesIO = None):
             response_data=e,
             status_code=500
         )
+
+
+def main():
+    handler(None)
+
+
+if __name__ == "__main__":
+    main()

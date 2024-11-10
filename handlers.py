@@ -1,11 +1,11 @@
 from typing import Awaitable, Callable
 from env import Env
-from handlers.cryptocom import CryptoComHandlerOpts, CryptoComHandler
+from cryptocom import CryptoComHandler, CryptoComHandlerOpts
 
 HandlerCbType = Callable[[str], Awaitable[float]]
 
 
-class Handler:
+class Handlers:
     @staticmethod
     def CryptoCom(symbol: str) -> float:
         opts = CryptoComHandlerOpts(api_key=Env.CRYPTO_API_KEY,

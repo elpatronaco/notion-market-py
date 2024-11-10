@@ -10,7 +10,7 @@ HandlerType = NewType("HandlerType", HandlerCbType)
 
 
 @dataclass
-class Handler:
+class NotionMarketHandler:
     name: str
     cb: Type[Callable]
     filters: FiltersType
@@ -24,7 +24,7 @@ class NotionMarketOpts:
 @dataclass
 class UpdateOpts:
     database_id: str
-    handlers: List[Handler]
+    handlers: List[NotionMarketHandler]
 
 
 def init_notion(token_v2: str):
