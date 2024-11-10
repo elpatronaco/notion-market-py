@@ -1,8 +1,8 @@
-from typing import Awaitable, Callable
+from typing import Awaitable, Callable, Dict, Any
 from env import Env
 from cryptocom import CryptoComHandler, CryptoComHandlerOpts
 
-HandlerCbType = Callable[[str], Awaitable[float]]
+HandlerCbType = Callable[[Dict[str, Any]], Awaitable[float]]
 
 
 class Handlers:

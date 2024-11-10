@@ -50,7 +50,7 @@ class NotionMarket:
     def __update_page(self, page_id: str):
         return self.client.pages.update(page_id=page_id, archived=False)
 
-    async def update_db(self, opts: UpdateOpts):
+    def update_db(self, opts: UpdateOpts):
         try:
             self.__get_db(opts.database_id)
         except Exception as e:
@@ -62,7 +62,9 @@ class NotionMarket:
 
             for page in pages["results"]:
                 try:
-                    await handler.cb(page["id"])
+                    # value = await handler.cb(page["id"])
+
+                    print(page)
                 except Exception as e:
                     print(f"Error updating page: {e}")
                     continue

@@ -1,4 +1,5 @@
 import io
+import json
 
 from env import Env
 from fdk import response
@@ -9,7 +10,7 @@ from handlers import Handlers
 
 
 def init_client():
-    opts = NotionMarketOpts(token_v2=Env.NOTION_TOKEN_V2)
+    opts = NotionMarketOpts(token_v2=Env.TOKEN_V2)
 
     return NotionMarket(opts)
 
@@ -21,7 +22,7 @@ def handler(ctx, data: io.BytesIO = None):
         opts = UpdateOpts(database_id=Env.DATABASE_ID, handlers=[
             NotionMarketHandler(name="crypto",
                                 filters=FilterArgs.select_eq("Tipo", "Criptos"),
-                                handler=lambda ticker: Handlers.CryptoCom(
+                                cb=lambda ticker: Handlers.CryptoCom(
                                     ticker)),
             # Handler(name="stocks",
             #        filters=FilterArgs.multi_select_contains("Tipo",
@@ -32,18 +33,11 @@ def handler(ctx, data: io.BytesIO = None):
 
         return response.Response(
             ctx,
-            response_data={"message": "Success"},
+            response_data=json.dumps({"message": "Success"}),
         )
     except Exception as e:
         return response.Response(
-            response_data=e,
+            ctx,
+            response_data=json.dumps(e.__str__()),
             status_code=500
         )
-
-
-def main():
-    handler(None)
-
-
-if __name__ == "__main__":
-    main()
